@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "id": "wallpicker.grid",
+  "name": "Wallpaper Picker",
+  "version": "1.0.0",
+  "author": "you",
+  "license": "MIT",
+  "description": "Fullscreen grid overlay to pick a wallpaper from your Pictures folder.",
+  "kinds": ["overlay", "bar-widget"],
+  "keepLoaded": true,
+  "entryPoints": {
+    "overlay": "WallpaperPicker.qml",
+    "barWidget": "BarWidget.qml"
+  },
+  "barWidget": {
+    "displayName": "Wallpapers",
+    "description": "Open the wallpaper picker grid",
+    "category": "Desktop",
+    "aliases": ["wallpaper", "wallpapers", "bg", "background", "wallpicker"],
+    "allowMultiple": false,
+    "defaultSection": "right"
+  }
+}
