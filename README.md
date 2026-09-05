@@ -1,4 +1,5 @@
 # Wallpaper Picker
+<img width="2560" height="1440" alt="Preview" src="Preview.png" />
 
 A fullscreen Omarchy overlay that grids out every image in your Pictures
 folder so you can click one to set it as your wallpaper. Built from the
