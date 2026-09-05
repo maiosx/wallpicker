@@ -20,7 +20,7 @@ omarchy plugin enable wallpicker.grid
 Or, once it's in its own git repo:
 
 ```bash
-omarchy plugin add https://github.com/<you>/wallpicker.git --enable --yes
+omarchy plugin add https://github.com/maiosx/wallpicker.git --enable --yes
 ```
 
 Enable the **Wallpapers** bar widget from Setup → Bar if it doesn't show
