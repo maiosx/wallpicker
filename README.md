@@ -7,18 +7,6 @@ keyboard focus, `keepLoaded`, bar-widget toggle.
 
 ## Install
 
-Local checkout (recommended while you tweak paths/columns):
-
-```bash
-plugin_dir="$HOME/.config/omarchy/plugins/wallpicker.grid"
-mkdir -p "$(dirname "$plugin_dir")"
-ln -s "$PWD" "$plugin_dir"
-omarchy-shell shell rescanPlugins
-omarchy plugin enable wallpicker.grid
-```
-
-Or, once it's in its own git repo:
-
 ```bash
 omarchy plugin add https://github.com/maiosx/wallpicker.git --enable --yes
 ```
