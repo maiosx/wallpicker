@@ -194,8 +194,12 @@ Item {
                 anchors.right: parent.right
                 anchors.margins: 28
                 anchors.topMargin: 14
-                cellWidth: (width - (root.columns - 1) * root.gridSpacing) / root.columns + root.gridSpacing
-                cellHeight: cellWidth * 9 / 16 + root.gridSpacing
+                // GridView fits N columns by floor(width / cellWidth), so
+                // cellWidth must be <= width/columns or it silently rounds
+                // down to one fewer column. Math.floor guards the edge case
+                // where floating-point rounding makes it land a hair over.
+                cellWidth: Math.floor(width / root.columns)
+                cellHeight: Math.floor((cellWidth - root.gridSpacing) * 9 / 16) + root.gridSpacing
                 model: imageModel
                 clip: true
                 boundsBehavior: Flickable.StopAtBounds
