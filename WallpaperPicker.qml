@@ -209,7 +209,7 @@ Item {
 
                     Rectangle {
                         anchors.fill: parent
-                        radius: 10
+                        radius: root.hoveredIndex === cell.index ? 0 : 10
                         color: "#141410"
                         border.width: root.hoveredIndex === cell.index ? 2 : 0
                         border.color: root.accent
