@@ -20,7 +20,7 @@ omarchy plugin enable wallpicker.grid
 Or, once it's in its own git repo:
 
 ```bash
-omarchy plugin add https://github.com/maiosx/wallpicker.git --enable --yes
+omarchy plugin add https://github.com/<you>/wallpicker.git --enable --yes
 ```
 
 Enable the **Wallpapers** bar widget from Setup → Bar if it doesn't show
@@ -49,21 +49,20 @@ Open `WallpaperPicker.qml` and edit the properties near the top:
 
 ## How wallpaper-setting works
 
-Omarchy doesn't ship a public "set this exact file as wallpaper" command
-(only `omarchy-theme-bg-next`, which cycles the *current theme's*
-backgrounds). So on click this plugin does what Omarchy itself does
-internally:
+On click this plugin runs Omarchy's own CLI:
 
 ```bash
-ln -sf "<chosen image>" "$HOME/.config/omarchy/current/background"
-pkill -x swaybg
-swaybg -i "<chosen image>" -m fill &
+omarchy theme bg set "<chosen image>"
 ```
 
-This mirrors the actual background symlink + swaybg relaunch, so the
-wallpaper survives independent of any theme's own background set. If a
-future Omarchy release exposes a stable "set wallpaper to path" command,
-swap it in inside `setWallpaper()` in place of the bash one-liner.
+via `Util.execDetached(...)` (the same helper Omarchy's own plugins use).
+Earlier drafts of this plugin manually symlinked
+`~/.config/omarchy/current/background` and relaunched `swaybg` by hand —
+that fought the CLI over state it owns (it actually tracks the current
+background under `~/.local/state/omarchy/current/`) and silently did
+nothing on current Omarchy releases. Letting `omarchy theme bg set` do
+it is what Omarchy's own community plugins (e.g. grid-wallpaper-picker)
+do, and it's the version that actually works.
 
 ## Remove
 
@@ -74,10 +73,10 @@ omarchy plugin remove wallpicker.grid --yes
 
 ## Notes / things to double check on your machine
 
-- This assumes Wayland + swaybg, which is what stock Omarchy uses for
-  backgrounds. If you've switched to `swww` or `hyprpaper`, change the
-  commands in `setWallpaper()` accordingly.
+- Relies on `omarchy theme bg set <path>` being available on your
+  Omarchy version. Run it once from a terminal with a real image path
+  to confirm it works on your system before relying on the plugin.
 - The Quickshell `Process`/`StdioCollector` API used for listing files
-  matches the pattern Omarchy's own plugins (e.g. Soprano) use, but if
-  your Quickshell version's IPC API differs slightly, check
-  `qs.Io`/`Quickshell.Io` docs and adjust `listProc`/`applyProc`.
+  matches the pattern Omarchy's own plugins use, but if your Quickshell
+  version's IPC API differs slightly, check `qs.Io`/`Quickshell.Io`
+  docs and adjust `listProc`.

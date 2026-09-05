@@ -62,19 +62,25 @@ Item {
 
     function setWallpaper(path) {
         root.statusText = "Applying " + baseName(path) + "…"
-        applyProc.command = ["bash", "-c",
-            "mkdir -p \"$HOME/.config/omarchy/current\"; " +
-            "ln -sf \"$1\" \"$HOME/.config/omarchy/current/background\"; " +
-            "pkill -x swaybg 2>/dev/null; " +
-            "setsid swaybg -i \"$1\" -m fill >/dev/null 2>&1 & disown",
-            "wallpicker", path
-        ]
-        applyProc.running = true
+        // Omarchy's own CLI is what actually owns the background symlink +
+        // swaybg reload. Shelling that out ourselves (as the first version
+        // of this plugin did) fought the CLI over that state and silently
+        // no-opped on current Omarchy releases. Let the CLI do it.
+        Util.execDetached("omarchy theme bg set " + Util.shellQuote(path))
+        applyCloseTimer.restart()
+    }
+
+    Timer {
+        id: applyCloseTimer
+        interval: 240
+        repeat: false
+        onTriggered: root.dismiss()
     }
 
     Process {
         id: listProc
         stdout: StdioCollector {
+            waitForEnd: true
             onStreamFinished: {
                 var lines = text.split("\n").filter(function (l) { return l.length > 0 })
                 for (var i = 0; i < lines.length; i++)
@@ -82,17 +88,6 @@ Item {
                 root.loading = false
                 if (lines.length === 0)
                     root.statusText = "No images found in " + root.picturesDir
-            }
-        }
-    }
-
-    Process {
-        id: applyProc
-        onExited: function (exitCode) {
-            if (exitCode === 0) {
-                root.dismiss()
-            } else {
-                root.statusText = "Failed to set wallpaper (exit " + exitCode + ")"
             }
         }
     }
