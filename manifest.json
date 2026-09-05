@@ -3,7 +3,7 @@
   "id": "wallpicker.grid",
   "name": "Wallpaper Picker",
   "version": "1.0.0",
-  "author": "you",
+  "author": "maiosx",
   "license": "MIT",
   "description": "Fullscreen grid overlay to pick a wallpaper from your Pictures folder.",
   "kinds": ["overlay", "bar-widget"],
